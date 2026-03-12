@@ -2,256 +2,65 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Paso Benggala</title>
-    
-    <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Orbitron&display=swap" rel="stylesheet">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paso Gembala - Monitoring CCTV</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root {
-            --bg-color: #121212; /* Dark Mode */
-            --card-bg: #1e1e1e;
-            --text-color: #ffffff;
-            --accent-color: #e74c3c; /* Warna Aksen Merah */
-            --on-color: #2ecc71;    /* Hijau ON */
-            --off-color: #95a5a6;   /* Abu-abu OFF */
-        }
-
-        * { box-sizing: border-box; }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Montserrat', sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        /* --- Header Section --- */
-        header {
-            background-color: var(--card-bg);
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid #333;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 1.2rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-        }
-
-        /* Status Badge (Pintar) */
-        .status-badge {
-            display: flex;
-            align-items: center;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            transition: all 0.3s ease;
-        }
-
-        /* Ikon Status */
-        .status-icon {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            margin-right: 8px;
-        }
-
-        /* State: ON */
-        .status-badge.on {
-            background-color: rgba(46, 204, 113, 0.1);
-            color: var(--on-color);
-            border: 1px solid var(--on-color);
-        }
-        .status-badge.on .status-icon { background-color: var(--on-color); }
-
-        /* State: OFF */
-        .status-badge.off {
-            background-color: rgba(149, 165, 166, 0.1);
-            color: var(--off-color);
-            border: 1px solid var(--off-color);
-        }
-        .status-badge.off .status-icon { background-color: var(--off-color); }
-
-
-        /* --- Main Content --- */
-        main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            width: 100%;
-        }
-
-        /* Waktu Realtime (Gaya Digital) */
-        .time-container {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.8rem;
-            color: var(--accent-color);
-            margin-bottom: 20px;
-            text-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
-        }
-
-        /* Container Video */
-        .video-wrapper {
-            width: 100%;
-            max-width: 800px; /* Maksimal lebar di PC */
-            background-color: #000;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 2px solid #333;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-            position: relative;
-        }
-
-        /* Kustomisasi Video.js */
-        .video-js {
-            width: 100% !important;
-            height: auto !important;
-            aspect-ratio: 16 / 9; /* Proporsi video 16:9 */
-        }
-        
-        /* Ubah tombol play jadi warna aksen */
-        .vjs-big-play-button {
-            background-color: rgba(231, 76, 60, 0.8) !important;
-            border: none !important;
-            border-radius: 50% !important;
-            width: 60px !important;
-            height: 60px !important;
-            line-height: 60px !important;
-            margin-top: -30px !important;
-            margin-left: -30px !important;
-        }
-
-
-        /* --- Marquee Footer --- */
-        .marquee-container {
-            background-color: var(--accent-color);
-            color: #fff;
-            padding: 10px 0;
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 0.85rem;
-            letter-spacing: 1px;
-            margin-top: auto; /* Tempel di bawah */
-        }
-
-        /* Responsif untuk HP */
-        @media (max-width: 600px) {
-            header h1 { font-size: 1rem; }
-            .time-container { font-size: 1.4rem; }
-            .video-wrapper { border-radius: 8px; }
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        .glass-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); }
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
     </style>
 </head>
-<body>
+<body class="text-slate-800">
 
-    <header>
-        <h1>CCTV MONITORING</h1>
-        <div id="camera-status" class="status-badge off">
-            <span class="status-icon"></span>
-            <span id="status-text">OFF</span>
+    <header class="sticky top-0 z-50 bg-indigo-700 text-white p-4 shadow-lg">
+        <div class="container mx-auto flex items-center justify-between">
+            <h1 class="text-xl font-bold tracking-tight flex items-center gap-2">
+                <i class="fas fa-video text-indigo-200"></i> Paso Gembala
+            </h1>
+            <span class="text-xs bg-indigo-800 px-2 py-1 rounded-full border border-indigo-500">Live Traffic</span>
         </div>
     </header>
 
-    <main>
-        <div id="realtime-time" class="time-container">00:00:00</div>
-        
-        <div class="video-wrapper">
-            <video
-                id="my-video"
-                class="video-js vjs-big-play-centered vjs-fluid"
-                controls
-                preload="auto"
-                poster="https://images.unsplash.com/photo-1557597774-9d2739f85a94?auto=format&fit=crop&q=80&w=800"
-                data-setup='{"fluid": true}'>
-                
-                <source src=" https://villa-simulations-vid-something.trycloudflare.com/kamera_teras/index.m3u8" type="application/x-mpegURL">
-                
-                <p class="vjs-no-js">
-                    Gunakan browser modern yang mendukung HLS untuk melihat video ini.
-                </p>
-            </video>
+    <main class="container mx-auto p-4 pb-20">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <script>
+                const cctvData = [
+                    { name: "Simpang Terminal Harjamukti", url: "https://rtsp.run/embed.html?streamUrl=NDkyOGY4NzdiYjdkYzMwMDgyMzBmMTYwYjQ5OGVlYzM6KzR5SU9oYWJXejRLaVVDeVFNYzdoVzVkY0dXTjFMaFBaQUlMS2o0QTVDakduUDJNUGh2NGRDRjNUbWlXQVhPTg==" },
+                    { name: "Simpang Kanggraksan", url: "https://rtsp.run/embed.html?streamUrl=NjA5YjFhZGQ0ZWI4ZWMyNGQ1NTE4MDI4YmNjOWU1ZmI6YkZMU0ExY3gwdzNNdzVBTkFCblRtbmc5RHBIZC8wcDU4QU1VT1NFdmN5b2drcjBlNzlJaUt5dnpUUGpwL1RMUA==" },
+                    { name: "Simpang Perumnas", url: "https://rtsp.run/embed.html?streamUrl=Yzk5ZjRmZmVkYTIzZWNhZjNiYzMyYTEwNDRiODQ3MDM6UzU5WlBpWVY2M011ZW1tYXFMZDdtVXkrbFREd1k2Vmp5U0hvTkdiVXR2UjJKUVZxSFlhSHdYbk5JNmRzTmE5dQ==" },
+                    { name: "Simpang Gunung Sari", url: "https://rtsp.run/embed.html?streamUrl=MGQwZDk0MmZiZDlkZDExODgzOWY5YTE3MmIzZjg2NWU6a1VpNDlleVJOZDBOejFTd2pHWkJSRE5LNS9TQXdZL2lHMGFOeWFaeDgzYXRaeWduSXZSZ3daaXVWVlV6YktkcA==" },
+                    { name: "Simpang Krucuk", url: "https://rtsp.run/embed.html?streamUrl=MTNkZjQ4ZGQwMzY2MDFhOTY4MTgxMjQ3NWI0MzE5Nzk6V1A0S0J6R1F1QXlPQXI4clhnUHdxcW9kTjVuTzcvUndtdHN2RVIrRDBiK21zYjFTZ0lMOFVEdFdwSmtoQURvZA==" },
+                    { name: "Simpang Winoan", url: "https://rtsp.run/embed.html?streamUrl=ZGYxYzRiZDc5ZDVlNGIzNmIzNmZkYzA5MDhkY2NmY2E6eUUwNTgwbG1FaGpFNElOOUF1aHQ5dkxjWEt2bGl2dnpiVGpYaHc0RUZrNytlSDhLNHgzR2FVS1ozZkhIZVVweQ==" },
+                    { name: "Simpang Asia", url: "https://rtsp.run/embed.html?streamUrl=ZTI2OGM0NDNmNmM1YTE3M2MwYmI2NTc5NWY3MTliNjg6SE1vS1BISFNSY3RzUVlWQzNRbjEvYkFZVzl5U2paY2xpeUZhQ01pOWhVTHlVTnAwMHRaWVh5N09xQ1Z2NFk3cw==" },
+                    { name: "Simpang Jabang Bayi", url: "https://rtsp.run/embed.html?streamUrl=ZDU3NDY1YjU0MGQxZWI2N2E5ODlhYzliNjUxMjRlOWM6S3IxV2FEa0I2UXFsZ00zL3QweVBLV1JIU0ZuNmVURUsxSDE1QmJsRlZtRU0rb2JOWkJPcVZNUTFUUTh1c3V0RA==" }
+                ];
+
+                document.write(cctvData.map(item => `
+                    <div class="glass-card rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-shadow">
+                        <div class="p-3 bg-white flex items-center gap-2">
+                            <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                            <h2 class="font-semibold text-sm text-slate-700 truncate">${item.name}</h2>
+                        </div>
+                        <div class="video-container">
+                            <iframe src="${item.url}" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                `).join(''));
+            </script>
+
         </div>
     </main>
 
-    <div class="marquee-container">
-        <marquee scrollamount="5">PERCOBAAN CCTV MENGGUNAKAN KAMERA HANDPHONE - UNIT TERAS RUMAH</marquee>
-    </div>
+    <footer class="fixed bottom-0 w-full bg-white border-t border-slate-200 p-4 text-center">
+        <p class="text-xs text-slate-500 font-medium tracking-widest uppercase">
+            Created by <span class="text-indigo-600">Ippnuda</span>
+        </p>
+    </footer>
 
-    <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
-    
-    <script>
-        // --- 1. Fungsi Waktu Realtime ---
-        function updateTime() {
-            const now = new Date();
-            const options = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
-            document.getElementById('realtime-time').textContent = now.toLocaleTimeString('id-ID', options);
-        }
-        setInterval(updateTime, 1000); // Update setiap detik
-        updateTime(); // Jalankan sekali saat load
-
-
-        // --- 2. Fungsi Logika Status Kamera (Pintar) ---
-        var player = videojs('my-video');
-        var statusBadge = document.getElementById('camera-status');
-        var statusText = document.getElementById('status-text');
-
-        // Fungsi untuk ubah tampilan jadi ON
-        function setStatusOn() {
-            statusBadge.classList.remove('off');
-            statusBadge.classList.add('on');
-            statusText.textContent = 'ON';
-        }
-
-        // Fungsi untuk ubah tampilan jadi OFF
-        function setStatusOff() {
-            statusBadge.classList.remove('on');
-            statusBadge.classList.add('off');
-            statusText.textContent = 'OFF';
-        }
-
-        // --- Event Listener Video.js untuk Deteksi ---
-
-        // Begitu player berhasil "load metadata" (tahu durasi, dll), berarti ON
-        player.on('loadedmetadata', function() {
-            setStatusOn();
-        });
-
-        // Begitu video mulai diputar, pastikan ON
-        player.on('play', function() {
-            setStatusOn();
-        });
-
-        // Jika terjadi error (misal link mati atau kamera off), ubah jadi OFF
-        player.on('error', function() {
-            setStatusOff();
-            console.log("Kamera tidak merespon atau link error.");
-        });
-        
-        // Memastikan video langsung coba diputar (autoplay muted agar tidak diblokir browser)
-        player.ready(function() {
-            this.muted(true);
-            this.play().catch(function(error) {
-                // Browser modern sering memblokir autoplay, jadi user harus klik manual
-                console.log("Autoplay dicegah oleh browser, user harus klik manual.");
-            });
-        });
-
-    </script>
 </body>
-
 </html>
