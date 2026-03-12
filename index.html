@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Paso Benggala</title>
+    
+    <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Orbitron&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #121212; /* Dark Mode */
+            --card-bg: #1e1e1e;
+            --text-color: #ffffff;
+            --accent-color: #e74c3c; /* Warna Aksen Merah */
+            --on-color: #2ecc71;    /* Hijau ON */
+            --off-color: #95a5a6;   /* Abu-abu OFF */
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- Header Section --- */
+        header {
+            background-color: var(--card-bg);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #333;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        /* Status Badge (Pintar) */
+        .status-badge {
+            display: flex;
+            align-items: center;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        /* Ikon Status */
+        .status-icon {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        /* State: ON */
+        .status-badge.on {
+            background-color: rgba(46, 204, 113, 0.1);
+            color: var(--on-color);
+            border: 1px solid var(--on-color);
+        }
+        .status-badge.on .status-icon { background-color: var(--on-color); }
+
+        /* State: OFF */
+        .status-badge.off {
+            background-color: rgba(149, 165, 166, 0.1);
+            color: var(--off-color);
+            border: 1px solid var(--off-color);
+        }
+        .status-badge.off .status-icon { background-color: var(--off-color); }
+
+
+        /* --- Main Content --- */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            width: 100%;
+        }
+
+        /* Waktu Realtime (Gaya Digital) */
+        .time-container {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            color: var(--accent-color);
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
+        }
+
+        /* Container Video */
+        .video-wrapper {
+            width: 100%;
+            max-width: 800px; /* Maksimal lebar di PC */
+            background-color: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid #333;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        /* Kustomisasi Video.js */
+        .video-js {
+            width: 100% !important;
+            height: auto !important;
+            aspect-ratio: 16 / 9; /* Proporsi video 16:9 */
+        }
+        
+        /* Ubah tombol play jadi warna aksen */
+        .vjs-big-play-button {
+            background-color: rgba(231, 76, 60, 0.8) !important;
+            border: none !important;
+            border-radius: 50% !important;
+            width: 60px !important;
+            height: 60px !important;
+            line-height: 60px !important;
+            margin-top: -30px !important;
+            margin-left: -30px !important;
+        }
+
+
+        /* --- Marquee Footer --- */
+        .marquee-container {
+            background-color: var(--accent-color);
+            color: #fff;
+            padding: 10px 0;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            margin-top: auto; /* Tempel di bawah */
+        }
+
+        /* Responsif untuk HP */
+        @media (max-width: 600px) {
+            header h1 { font-size: 1rem; }
+            .time-container { font-size: 1.4rem; }
+            .video-wrapper { border-radius: 8px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>CCTV MONITORING</h1>
+        <div id="camera-status" class="status-badge off">
+            <span class="status-icon"></span>
+            <span id="status-text">OFF</span>
+        </div>
+    </header>
+
+    <main>
+        <div id="realtime-time" class="time-container">00:00:00</div>
+        
+        <div class="video-wrapper">
+            <video
+                id="my-video"
+                class="video-js vjs-big-play-centered vjs-fluid"
+                controls
+                preload="auto"
+                poster="https://images.unsplash.com/photo-1557597774-9d2739f85a94?auto=format&fit=crop&q=80&w=800"
+                data-setup='{"fluid": true}'>
+                
+                <source src="https://radiation-decimal-alaska-methods.trycloudflare.com/kamera_teras/index.m3u8" type="application/x-mpegURL">
+                
+                <p class="vjs-no-js">
+                    Gunakan browser modern yang mendukung HLS untuk melihat video ini.
+                </p>
+            </video>
+        </div>
+    </main>
+
+    <div class="marquee-container">
+        <marquee scrollamount="5">PERCOBAAN CCTV MENGGUNAKAN KAMERA HANDPHONE - UNIT TERAS RUMAH</marquee>
+    </div>
+
+    <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
+    
+    <script>
+        // --- 1. Fungsi Waktu Realtime ---
+        function updateTime() {
+            const now = new Date();
+            const options = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+            document.getElementById('realtime-time').textContent = now.toLocaleTimeString('id-ID', options);
+        }
+        setInterval(updateTime, 1000); // Update setiap detik
+        updateTime(); // Jalankan sekali saat load
+
+
+        // --- 2. Fungsi Logika Status Kamera (Pintar) ---
+        var player = videojs('my-video');
+        var statusBadge = document.getElementById('camera-status');
+        var statusText = document.getElementById('status-text');
+
+        // Fungsi untuk ubah tampilan jadi ON
+        function setStatusOn() {
+            statusBadge.classList.remove('off');
+            statusBadge.classList.add('on');
+            statusText.textContent = 'ON';
+        }
+
+        // Fungsi untuk ubah tampilan jadi OFF
+        function setStatusOff() {
+            statusBadge.classList.remove('on');
+            statusBadge.classList.add('off');
+            statusText.textContent = 'OFF';
+        }
+
+        // --- Event Listener Video.js untuk Deteksi ---
+
+        // Begitu player berhasil "load metadata" (tahu durasi, dll), berarti ON
+        player.on('loadedmetadata', function() {
+            setStatusOn();
+        });
+
+        // Begitu video mulai diputar, pastikan ON
+        player.on('play', function() {
+            setStatusOn();
+        });
+
+        // Jika terjadi error (misal link mati atau kamera off), ubah jadi OFF
+        player.on('error', function() {
+            setStatusOff();
+            console.log("Kamera tidak merespon atau link error.");
+        });
+        
+        // Memastikan video langsung coba diputar (autoplay muted agar tidak diblokir browser)
+        player.ready(function() {
+            this.muted(true);
+            this.play().catch(function(error) {
+                // Browser modern sering memblokir autoplay, jadi user harus klik manual
+                console.log("Autoplay dicegah oleh browser, user harus klik manual.");
+            });
+        });
+
+    </script>
+</body>
+</html>
